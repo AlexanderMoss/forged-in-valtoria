@@ -1,0 +1,108 @@
+import random
+
+# Define constants for game balance
+PLAYER_MAX_HP = 100
+PLAYER_ATTACK_DAMAGE = 10
+ENEMY_MAX_HP = 50
+ENEMY_ATTACK_DAMAGE = 5
+TILE_TYPES = ["STONE", "DIRT", "GRASS", "OCEAN"]
+TILE_PERCENTAGES = {"STONE": 10, "DIRT": 40, "GRASS": 40, "OCEAN": 10}
+
+# Define the Player class
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.hp = PLAYER_MAX_HP
+
+    def attack(self, enemy):
+        print(f"{self.name} attacks {enemy.name} for {PLAYER_ATTACK_DAMAGE} damage!")
+        enemy.take_damage(PLAYER_ATTACK_DAMAGE)
+
+    def take_damage(self, amount):
+        self.hp -= amount
+        print(f"{self.name} takes {amount} damage!")
+        if self.hp <= 0:
+            self.die()
+
+    def die(self):
+        print(f"{self.name} has died!")
+        exit()
+
+# Define the Enemy class
+class Enemy:
+    def __init__(self, name):
+        self.name = name
+        self.hp = ENEMY_MAX_HP
+
+    def attack(self, player):
+        print(f"{self.name} attacks {player.name} for {ENEMY_ATTACK_DAMAGE} damage!")
+        player.take_damage(ENEMY_ATTACK_DAMAGE)
+
+    def take_damage(self, amount):
+        self.hp -= amount
+        print(f"{self.name} takes {amount} damage!")
+        if self.hp <= 0:
+            self.die()
+
+    def die(self):
+        print(f"{self.name} has been defeated!")
+
+# Define the Map class
+class Map:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.tiles = self.generate_tiles()
+
+    def generate_tiles(self):
+        tiles = []
+        for y in range(self.height):
+            row = []
+            for x in range(self.width):
+                tile_type = random.choices(
+                    list(TILE_PERCENTAGES.keys()),
+                    list(TILE_PERCENTAGES.values())
+                )[0]
+                row.append(tile_type)
+            tiles.append(row)
+        return tiles
+
+    def get_tile(self, x, y):
+        return self.tiles[y][x]
+
+    def print_map(self):
+        for row in self.tiles:
+            print("".join([tile[0] for tile in row]))
+
+# Define the Game class
+class Game:
+    def __init__(self):
+        self.player = Player("Player")
+        self.enemies = []
+        self.map = Map(40, 20)
+        self.generate_enemies()
+
+    def generate_enemies(self):
+        for i in range(random.randint(3, 5)):
+            enemy_type = random.choice(["Goblin", "Orc", "Troll"])
+            enemy = Enemy(enemy_type)
+            self.enemies.append(enemy)
+
+    def run(self):
+        print("Welcome to the game!")
+        while True:
+            print("\n" + "-"*20)
+            self.map.print_map()
+            print(f"Player HP: {self.player.hp}")
+            for enemy in self.enemies:
+                print(f"{enemy.name} HP: {enemy.hp}")
+            action = input("Enter 'a' to attack, 'q' to quit: ")
+            if action == "q":
+                exit()
+            elif action == "a":
+                enemy = random.choice(self.enemies)
+                self.player.attack(enemy)
+                if enemy.hp <= 0:
+                    self.enemies.remove(enemy)
+                else:
+                    enemy
