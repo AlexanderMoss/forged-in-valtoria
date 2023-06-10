@@ -15,8 +15,9 @@ class Player:
         self.hp = PLAYER_MAX_HP
 
     def attack(self, enemy):
-        print(f"{self.name} attacks {enemy.name} for {PLAYER_ATTACK_DAMAGE} damage!")
-        enemy.take_damage(PLAYER_ATTACK_DAMAGE)
+        damage = random.randint(PLAYER_ATTACK_DAMAGE - 3, PLAYER_ATTACK_DAMAGE + 3)
+        print(f"{self.name} attacks {enemy.name} for {damage} damage!")
+        enemy.take_damage(damage)
 
     def take_damage(self, amount):
         self.hp -= amount
@@ -35,8 +36,9 @@ class Enemy:
         self.hp = ENEMY_MAX_HP
 
     def attack(self, player):
-        print(f"{self.name} attacks {player.name} for {ENEMY_ATTACK_DAMAGE} damage!")
-        player.take_damage(ENEMY_ATTACK_DAMAGE)
+        damage = random.randint(ENEMY_ATTACK_DAMAGE - 2, ENEMY_ATTACK_DAMAGE + 2)
+        print(f"{self.name} attacks {player.name} for {damage} damage!")
+        player.take_damage(damage)
 
     def take_damage(self, amount):
         self.hp -= amount
@@ -105,4 +107,10 @@ class Game:
                 if enemy.hp <= 0:
                     self.enemies.remove(enemy)
                 else:
-                    enemy
+                    for enemy in self.enemies:
+                        enemy.attack(self.player)
+
+# Run the game
+game = Game()
+game.run()
+
