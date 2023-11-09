@@ -110,6 +110,216 @@ class Game:
                     for enemy in self.enemies:
                         enemy.attack(self.player)
 
+# Add this to the game loop
+print("Your current position: ({}, {})".format(player_x, player_y))
+import os
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# Use clear_screen() before printing the map in the game loop
+# After getting the player's input, ask for confirmation
+confirmation = input("Move {}? (Y/N): ".format(direction.upper()))
+
+# Check if the player confirmed the movement
+if confirmation.upper() == "Y":
+    # Move the player
+    # ...
+# Inside the play_dungeon() function
+exit_dungeon = input("Do you want to exit the dungeon? (Y/N): ")
+if exit_dungeon.upper() == "Y":
+    return  # exit the dungeon
+# Inside the play_dungeon() function
+print("Your health: {}".format(player_health))
+# Inside the game loop
+if random.randint(1, 10) == 1:
+    print("You stumbled upon a hidden treasure!")
+    # Handle the treasure event
+import os
+import random
+
+# Constants for rewards
+TREASURE_REWARD = 20
+HEALING_POTION_REWARD = 1
+
+# ...
+
+# Function to handle random events
+def handle_random_event():
+    event_type = random.randint(1, 4)
+
+    if event_type == 1:
+        print("You stumbled upon a hidden treasure!")
+        reward = random.randint(1, TREASURE_REWARD)
+        print("You found {} gold coins!".format(reward))
+        # Handle the gold reward, e.g., increase player's gold
+    elif event_type == 2:
+        print("You found a healing potion!")
+        print("Your health is restored.")
+        # Handle healing potion reward, e.g., increase player's health
+    elif event_type == 3:
+        print("You encountered a friendly NPC who offers guidance.")
+        print("Gain experience points!")
+        # Handle experience points reward
+    elif event_type == 4:
+        print("You fell into a trap set by a mischievous creature.")
+        damage = random.randint(1, 5)
+        print("You took {} damage!".format(damage))
+        # Handle damage to the player, e.g., decrease player's health
+
+# ...
+
+# Inside the game loop
+if random.randint(1, 10) == 1:
+    handle_random_event()
+import os
+import random
+
+# Constants for rewards
+TREASURE_REWARD = 20
+HEALING_POTION_REWARD = 1
+
+# ...
+
+# Initialize player's money
+player_money = 0
+
+# ...
+
+# Function to handle random events
+def handle_random_event():
+    global player_money  # Access the global variable
+
+    event_type = random.randint(1, 4)
+
+    if event_type == 1:
+        print("You stumbled upon a hidden treasure!")
+        reward = random.randint(1, TREASURE_REWARD)
+        print("You found {} gold coins!".format(reward))
+        player_money += reward  # Add the reward to player's money
+    elif event_type == 2:
+        print("You found a healing potion!")
+        print("Your health is restored.")
+        # Handle healing potion reward, e.g., increase player's health
+    elif event_type == 3:
+        print("You encountered a friendly NPC who offers guidance.")
+        print("Gain experience points!")
+        # Handle experience points reward
+    elif event_type == 4:
+        print("You fell into a trap set by a mischievous creature.")
+        damage = random.randint(1, 5)
+        print("You took {} damage!".format(damage))
+        # Handle damage to the player, e.g., decrease player's health
+
+# ...
+
+# Inside the game loop
+while True:
+    # ...
+
+    # Handle player's input
+    if direction.upper() in ["W", "A", "S", "D"]:
+        new_location = move_player(player_location, direction)
+        if is_valid_move(new_location):
+            player_location = new_location
+            handle_random_event()  # Check for random events
+            print("Your current position: ({}, {})".format(player_location[0], player_location[1]))
+        else:
+            print("Invalid move. Try again.")
+
+    # ...
+
+    # Check if the player has enough money to enter the dungeon
+    if world_map[player_location[1]][player_location[0]] == DUNGEON_TILE:
+        if player_money >= 10:  # Adjust the cost as needed
+            enter_dungeon(player_location[0], player_location[1])
+            player_money -= 10  # Subtract the cost of entering the dungeon
+        else:
+            print("You don't have enough money to enter the dungeon. Collect more gold!")
+import os
+import random
+
+# Constants for rewards
+TREASURE_REWARD = 20
+HEALING_POTION_REWARD = 1
+
+# ...
+
+# Initialize player's money and health
+player_money = 0
+player_health = 100  # Set the initial health to 100, for example
+
+# ...
+
+# Function to handle random events
+def handle_random_event():
+    global player_money, player_health  # Access the global variables
+
+    event_type = random.randint(1, 4)
+
+    if event_type == 1:
+        print("You stumbled upon a hidden treasure!")
+        reward = random.randint(1, TREASURE_REWARD)
+        print("You found {} gold coins!".format(reward))
+        player_money += reward  # Add the reward to player's money
+    elif event_type == 2:
+        print("You found a healing potion!")
+        print("Your health is restored.")
+        player_health = min(100, player_health + HEALING_POTION_REWARD)  # Increase health up to a maximum of 100
+    elif event_type == 3:
+        print("You encountered a friendly NPC who offers guidance.")
+        print("Gain experience points!")
+        # Handle experience points reward
+    elif event_type == 4:
+        print("You fell into a trap set by a mischievous creature.")
+        damage = random.randint(1, 5)
+        print("You took {} damage!".format(damage))
+        player_health = max(0, player_health - damage)  # Decrease health, but not below 0
+
+# ...
+
+# Inside the game loop
+while True:
+    # ...
+
+    # Handle player's input
+    if direction.upper() in ["W", "A", "S", "D"]:
+        new_location = move_player(player_location, direction)
+        if is_valid_move(new_location):
+            player_location = new_location
+            handle_random_event()  # Check for random events
+            print("Your current position: ({}, {})".format(player_location[0], player_location[1]))
+            print("Your current health: {}".format(player_health))
+        else:
+            print("Invalid move. Try again.")
+
+    # ...
+
+    # Check if the player has enough money to enter the dungeon
+    if world_map[player_location[1]][player_location[0]] == DUNGEON_TILE:
+        if player_money >= 10:  # Adjust the cost as needed
+            enter_dungeon(player_location[0], player_location[1])
+            player_money -= 10  # Subtract the cost of entering the dungeon
+        else:
+            print("You don't have enough money to enter the dungeon. Collect more gold!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Run the game
 game = Game()
 game.run()
